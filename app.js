@@ -2,6 +2,7 @@ let express = require("express");
 const dotenv = require("dotenv");
 const bodyParser = require("body-parser");
 const sequelize=require('./util/database')
+const morgan = require('morgan');
 
 var port = process.env.PORT || 5000;
 
@@ -20,6 +21,7 @@ let app = express();
 
 //Middlewares
 
+app.use(morgan('dev'));
 app.use(express.json());
 app.use(
     bodyParser.urlencoded({
