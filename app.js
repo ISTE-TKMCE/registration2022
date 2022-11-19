@@ -37,7 +37,7 @@ app.set("view engine", "ejs");
 
 
 app.get("/", (req, res) => {
-    res.send({ "name": "Vinay" });
+    res.render("homepage");
 });
 
 sequelize.sync().then(result => {
