@@ -48,6 +48,13 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 //routes and logic
 
+
+app.get("/", (req, res) => {
+    res.render("homepage");
+});
+app.get("/users", (req, res)=>{
+    res.send({ status: 200, message: "working"})
+})
 app.put("/user", upload.single('file'), async (req, res) => {
     try {
         const data = await JSON.parse(req.body.data)
@@ -87,10 +94,6 @@ app.put("/user", upload.single('file'), async (req, res) => {
         res.send({ status: 400, message: "Couldn't register user" })
     }
 })
-app.get("/", (req, res) => {
-    res.render("homepage");
-});
-
 sequelize.sync().then(result => {
     app.listen(port, () => {
         console.log("server started")
