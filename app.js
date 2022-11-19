@@ -25,7 +25,10 @@ let app = express();
 //Middlewares
 const publicdrc = path.resolve(__dirname, 'public')
 app.use(express.static(publicdrc))
-app.use(cors())
+
+app.use(cors(
+
+))
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(
@@ -53,7 +56,10 @@ app.get("/", (req, res) => {
     res.render("homepage");
 });
 app.get("/users", (req, res)=>{
-    res.send({ status: 200, message: "working"})
+    User.findAll().then(users=>res.send({ status:200, data: users, message: "Fetched users"})).catch(err=>{
+        console.log(err);
+        res.send({status:400 , message: "Couldn't fetch users"})
+    })
 })
 app.put("/user", upload.single('file'), async (req, res) => {
     try {
