@@ -33,6 +33,7 @@ app.use(
         extended: false,
     })
 );
+app.set('view engine', 'ejs')
 app.use(bodyParser.json());
 app.use(express.static(__dirname + '/public'));
 const storage = multer.diskStorage({
@@ -87,7 +88,7 @@ app.put("/user", upload.single('file'), async (req, res) => {
     }
 })
 app.get("/", (req, res) => {
-    res.send("Nothing to see");
+    res.render("homepage");
 });
 
 sequelize.sync().then(result => {
