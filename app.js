@@ -5,7 +5,8 @@ const sequelize = require('./util/database')
 const morgan = require('morgan');
 const cors = require("cors")
 const multer = require("multer")
-const path = require("path")
+const path = require("path");
+const { where } = require("sequelize");
 const User = require("./models/models").User
 var port = process.env.PORT || 5000;
 
@@ -29,7 +30,7 @@ app.use(express.static(publicdrc))
 app.use(cors(
 
 ))
-app.use(morgan('dev'));
+
 app.use(express.json());
 app.use(
     bodyParser.urlencoded({
@@ -45,7 +46,7 @@ const storage = multer.diskStorage({
     },
     filename: (req, file, cb) => {
 
-        cb(null, new Date().toISOString().replace(/:/g, '-') + '-' + file.originalname)
+        cb(null, file.originalname)
     }
 })
 const upload = multer({ storage });
@@ -64,7 +65,7 @@ app.get("/users", (req, res)=>{
 app.put("/user", upload.single('file'), async (req, res) => {
     try {
         const data = await JSON.parse(req.body.data)
-        const user = await User.findOne({ email: req.body.email }).then(response => { if (response) { return true } else { return false } }).catch(err => { return false })
+        const user = await User.findOne({where: { email: req.body.email } }).then(response => { if (response) { console.log(response); return true } else { return false } }).catch(err => { return false })
         if (user) {
             return res.send({ status: 403, message: "Email already registered" })
         }
@@ -85,7 +86,7 @@ app.put("/user", upload.single('file'), async (req, res) => {
                 typeofservice: data.typeofservice,
                 accholdersname: data.accholdersname,
                 transactionid: data.transactionid,
-                imageurl: new Date().toISOString().replace(/:/g, '-') + '-' + req.file.originalname
+                imageurl: req.file.originalname
             }).then(response => {
                 console.log(response)
                 res.send({ status: 200, message: "User created successfully" })
