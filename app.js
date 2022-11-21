@@ -66,7 +66,7 @@ app.put("/user", upload.single('file'), async (req, res) => {
     try {
         const data = await JSON.parse(req.body.data)
         if(!data.name || !data.email || !data.phonenumber){
-            console.log()
+            console.log("error")
             throw new Error("Invalid Data")
         }
         const user = await User.findOne({where: { email: data.email } }).then(response => {console.log("response", response); if (response===null) { return false } else { return true } }).catch(err => { return true })
