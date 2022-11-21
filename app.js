@@ -65,7 +65,8 @@ app.get("/users", (req, res)=>{
 app.put("/user", upload.single('file'), async (req, res) => {
     try {
         const data = await JSON.parse(req.body.data)
-        const user = await User.findOne({where: { email: req.body.email } }).then(response => { if (response) { console.log(response); return true } else { return false } }).catch(err => { return false })
+        const user = await User.findOne({where: { email: data.email } }).then(response => {console.log("response", response); if (response===null) { return false } else { return true } }).catch(err => { return true })
+        console.log(user)
         if (user) {
             return res.send({ status: 403, message: "Email already registered" })
         }
