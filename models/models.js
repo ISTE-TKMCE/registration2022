@@ -1,6 +1,6 @@
 const Sequelize =  require('sequelize')
 const sequelize = require('../util/database')
-const User = sequelize.define('Registrations', {
+const User = sequelize.define('Members', {
     id: {
         type: Sequelize.INTEGER,
         autoIncrement: true,
@@ -72,11 +72,11 @@ const User = sequelize.define('Registrations', {
         allowNull: false,
     },
     istemember: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false,
     },
     leapmembership: {
-        type: Sequelize.BOOLEAN,
+        type: Sequelize.STRING,
         allowNull: false,
     }
 })
