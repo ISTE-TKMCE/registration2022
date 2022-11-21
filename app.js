@@ -91,7 +91,9 @@ app.put("/user", upload.single('file'), async (req, res) => {
                 typeofservice: data.typeofservice,
                 accholdersname: data.accholdersname,
                 transactionid: data.transactionid,
-                imageurl: req.file.originalname
+                imageurl: req.file.originalname,
+                istemember: data.istemember,
+                leapmembership: data.leapmembership
             }).then(response => {
                 console.log(response)
                 res.send({ status: 200, message: "User created successfully" })
