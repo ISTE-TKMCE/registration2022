@@ -56,20 +56,20 @@ const upload = multer({ storage });
 app.get("/", (req, res) => {
     res.render("homepage");
 });
-app.get("/users", (req, res)=>{
-    User.findAll().then(users=>res.send({ status:200, data: users, message: "Fetched users"})).catch(err=>{
+app.get("/users", (req, res) => {
+    User.findAll().then(users => res.send({ status: 200, data: users, message: "Fetched users" })).catch(err => {
         console.log(err);
-        res.send({status:400 , message: "Couldn't fetch users"})
+        res.send({ status: 400, message: "Couldn't fetch users" })
     })
 })
 app.put("/user", upload.single('file'), async (req, res) => {
     try {
         const data = await JSON.parse(req.body.data)
-        if(!data.name || !data.email || !data.phonenumber){
+        if (!data.name || !data.email || !data.phonenumber) {
             console.log("error")
             throw new Error("Invalid Data")
         }
-        const user = await User.findOne({where: { email: data.email } }).then(response => {console.log("response", response); if (response===null) { return false } else { return true } }).catch(err => { return true })
+        const user = await User.findOne({ where: { email: data.email } }).then(response => { console.log("response", response); if (response === null) { return false } else { return true } }).catch(err => { return true })
         console.log(user)
         if (user) {
             return res.send({ status: 403, message: "Email already registered" })
@@ -106,6 +106,21 @@ app.put("/user", upload.single('file'), async (req, res) => {
     catch (err) {
         console.log(err)
         res.send({ status: 400, message: "Couldn't register user" })
+    }
+})
+app.delete("/user", (req, res) => {
+    if (req.body.key === String(process.env.KEY)) {
+        User.destroy({
+            where: {
+                email: req.body.email
+            }
+        }).then(users => res.send({ status: 200, data: users, message: "Deleted user " })).catch(err => {
+            console.log(err);
+            res.send({ status: 400, message: "Couldn't delete user" })
+        })
+    }
+    else {
+        res.send({ status: 403, message: "UnAuthorized" })
     }
 })
 sequelize.sync().then(result => {
